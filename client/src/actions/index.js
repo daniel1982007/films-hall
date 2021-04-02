@@ -30,6 +30,16 @@ export const deleteFilm = (id) => async (dispatch) => {
     }
 }
 
+export const importFilms = (filmsObjs) => async (dispatch) => {
+    try {
+        const {data} = await api.importFilms(filmsObjs)
+        dispatch({type: 'IMPORT_FILMS', payload: data})
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const searchFilm = (str) => async (dispatch) => {
     try {
         const {data} = await api.searchFilm(str)

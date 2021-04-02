@@ -8,7 +8,9 @@ export const films = (films=[], action) => {
             return action.payload
         case 'ADD_FILM':
             console.log(action.payload)
-            return [...films, action.payload]    
+            return [...films, action.payload]
+        case 'IMPORT_FILMS':
+             return films.concat(action.data)   
         case 'DELETE_FILM':
             return films.filter(film => film._id !== action.payload)
         case 'SEARCH_FILM':

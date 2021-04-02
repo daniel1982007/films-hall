@@ -16,6 +16,8 @@ export const getFilms = () => axios.get(url)
 
 export const addFilm = (film) => axios.post(`${url}/add`, film)
 
+export const importFilms = (filmsObjs) => axios.post(`${url}/import`, filmsObjs)
+
 export const deleteFilm = (id) => axios.delete(`${url}/${id}/delete`)
 
 export const searchFilm = (str) => axios.post(`${url}/search`, {searchText: str})

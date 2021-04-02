@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 
-import {addFilm} from '../actions/index'
+import {addFilm, importFilms} from '../actions/index'
 
 const AddFilmForm = () => {
     const [filmData, setFilmData] = useState({
@@ -24,14 +24,33 @@ const AddFilmForm = () => {
     }
 
     const handleImport = (e) => {
-        e.preventDefault()
+        //e.preventDefault()
+        const file = e.target.files[0]
+
         const reader = new FileReader()
         reader.onload = async (e) => {
             const text = e.target.result
             console.log(text)
+            
+            const textGroups = text.split(/\r\n\r\n/g)
+            const filmObjects = textGroups.map(oneTextGroup => {
+                const group = oneTextGroup.replace(/Release Year/, 'ReleaseYear')
+                const keys = group.match(/(?<=\\n)[\w]+|^[\w]+/gm)
+                const values = group.match(/(?<=:)[\w:,\- ]+/g)
+                const obj = {}
+                keys.forEach((key, index) => obj[key] = values[index].trim())
+                return obj
+            })
+
+            console.log(filmObjects)
+
+            dispatch(importFilms(filmObjects))
+
+            history.push('/')
+
         }
 
-        reader.readAsText(e.target.files[0])
+        reader.readAsText(file)
     }
 
 

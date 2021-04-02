@@ -33,6 +33,7 @@ export const deleteFilm = (id) => async (dispatch) => {
 export const importFilms = (filmsObjs) => async (dispatch) => {
     try {
         const {data} = await api.importFilms(filmsObjs)
+        console.log(data)
         dispatch({type: 'IMPORT_FILMS', payload: data})
 
     } catch (error) {

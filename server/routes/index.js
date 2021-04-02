@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get('/', getFilms)
 router.post('/add', addFilm)
-router.post('/import', importFilms)
+router.patch('/import', importFilms)
 router.delete('/:id/delete', deleteFilm)
 router.post('/search', searchFilm)
 

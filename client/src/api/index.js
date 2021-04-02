@@ -16,7 +16,7 @@ export const getFilms = () => axios.get(url)
 
 export const addFilm = (film) => axios.post(`${url}/add`, film)
 
-export const importFilms = (filmsObjs) => axios.post(`${url}/import`, filmsObjs)
+export const importFilms = (filmsObjs) => axios.patch(`${url}/import`, filmsObjs)
 
 export const deleteFilm = (id) => axios.delete(`${url}/${id}/delete`)
 

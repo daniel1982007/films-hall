@@ -22,14 +22,18 @@ export const addFilm = async (req, res) => {
     }
 }
 
-export const importFilms = (req, res) => {
+export const importFilms = async (req, res) => {
     const films = req.body
     try {
         films.forEach(async (film) => {
-            const newFilm = new Film(film)
-            await newFilm.save()
+            await Film.findOneAndUpdate({Title: film.Title}, film, {new: true})
+
+            // const newFilm = new Film(film)
+            // await newFilm.save()
         })
-        res.status(201).json(films)
+        const updatedFilms = await Film.find()
+        res.status(201).json(updatedFilms)
+
     } catch (error) {
         res.status(409).json({message: error.message})
     }

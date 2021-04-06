@@ -10,7 +10,7 @@ const FilmList = () => {
     films.sort((a, b) => {
         return a.Title.toUpperCase() > b.Title.toUpperCase() ? 1 : -1
     })
-    console.log(films)
+    console.log(films)//first run because first render, second run because useEffect getfilms, pass to reducer, and here useSelector runs
     
     useEffect(() => {
         dispatch(getFilms())

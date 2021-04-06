@@ -5,13 +5,21 @@ import {deleteFilm} from '../actions/index'
 
 
 const Film = () => {
-    const films = JSON.parse(localStorage.getItem('filmsData'))
-    console.log(films)
     const {id} = useParams()
+    console.log(id)
+    
     const dispatch = useDispatch()
     const history = useHistory()
+    
+    //1, if refresh, films will be empty
+    //2, if add new, films are not updated
 
+    const films = JSON.parse(localStorage.getItem('films'))
+    console.log(films)
     const film = films.find(film => film._id === id)
+    
+
+    //const film = films.find(film => film._id === id)
 
     const handleDelete = () => {
         dispatch(deleteFilm(film._id))

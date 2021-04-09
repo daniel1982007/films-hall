@@ -12,7 +12,7 @@ import {Switch, Route} from 'react-router-dom'
 
 const App = () => {
     return (
-        <div className='bg-light vh-100'>
+        <div className='bg-light'>
             <ToastContainer position='top-center' autoClose={2000} hideProgressBar transition={Slide} />
             <Navbar />
             

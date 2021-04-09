@@ -14,9 +14,9 @@ const Film = () => {
     //1, if refresh, films will be empty
     //2, if add new, films are not updated
 
-    const films = JSON.parse(localStorage.getItem('films'))
-    console.log(films)
-    const film = films.find(film => film._id === id)
+    const film = JSON.parse(localStorage.getItem('films')).find(film => film._id === id)
+    console.log(film)
+    
     
 
     //const film = films.find(film => film._id === id)
@@ -28,26 +28,29 @@ const Film = () => {
 
 
     return (
-        <div className='p-4'>
-            <div>
-                <h3 className='text-center text-primary'>Title of this film:</h3>
-                <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.Title}</h1>
-            </div>
-            <div>
-                <h3 className='text-center text-primary'>Release year of this film:</h3>
-                <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.ReleaseYear}</h1>
-            </div>
-            <div>
-                <h3 className='text-center text-primary'>Film format:</h3>
-                <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.Format}</h1>
-            </div>
-            <div>
-                <h3 className='text-center text-primary'>All actors in this film:</h3>
-                <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.Stars}</h1>
-            </div>
-            <div className='d-flex justify-content-between'>
-                <Link to='/' className='btn btn-primary m-3'>Back to film list</Link>
-                <button className='btn btn-danger m-3' onClick={handleDelete}>Delete</button>
+        <div className='container-sm py-3'>
+            <div className='card'>
+                <div className='card-header'>
+                    <h3 className='text-primary'>Wonderful film: <span className='fst-italic text-decoration-underline'>{film.Title}</span></h3>
+                </div>
+                <div className='card-body bg-light'>
+                    <div>
+                        <h3 className='text-center text-primary'>Release year of this film:</h3>
+                        <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.ReleaseYear}</h1>
+                    </div>
+                    <div>
+                        <h3 className='text-center text-primary'>Film format:</h3>
+                        <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.Format}</h1>
+                    </div>
+                    <div>
+                        <h3 className='text-center text-primary'>All actors in this film:</h3>
+                        <h1 className='text-center text-primary fst-italic text-decoration-underline'>{film.Stars}</h1>
+                    </div>
+                </div>
+                <div className='card-footer d-flex justify-content-between'>
+                    <Link to='/' className='btn btn-primary m-3'>Back to film list</Link>
+                    <button className='btn btn-danger m-3' onClick={handleDelete}>Delete</button>
+                </div>
             </div>
         </div>
     )

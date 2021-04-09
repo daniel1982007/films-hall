@@ -14,7 +14,10 @@ export const addFilm = (film) => async (dispatch) => {
     try {
         const {data} = await api.addFilm(film)
         console.log(data)
+        
         dispatch({type: 'ADD_FILM', payload: data})
+        
+        return data
     } catch (error) {
         console.log(error)
     }

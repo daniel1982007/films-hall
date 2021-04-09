@@ -7,15 +7,13 @@ const FilmList = () => {
     const dispatch = useDispatch()
 
     const films = useSelector(state => state.films)
-    films.sort((a, b) => {
-        return a.Title.toUpperCase() > b.Title.toUpperCase() ? 1 : -1
-    })
+    
     console.log(films)//first run because first render, second run because useEffect getfilms, pass to reducer, and here useSelector runs
     
     useEffect(() => {
         dispatch(getFilms())
         
-    }, [dispatch])
+    }, [dispatch]) //when redirect from other location to this home '/', it will rerender, all components run, if state inside this component changes, useEffect will not run,, if nothing changes in []
 
 
     return (
@@ -26,12 +24,28 @@ const FilmList = () => {
             </div>) 
             :
             (<>
-                <h2 className='m-3 text-primary'>Films' list</h2>
-                <ol className='m-3 h3 text-primary fst-italic'>
+                <h2 className='m-3 text-primary text-center'>Films' list</h2>
+                {/* <ol className='m-3 h3 text-primary fst-italic'>
                     {films.map((film, index) => (<li key={index} className='m-3'>
                         <Link to={`/${film._id}`}>{film.Title}</Link>
                     </li>))}
-                </ol>
+                </ol> */}
+
+                
+                    {films.map((film, index) => (
+                        <div className='container-sm text-center'>
+                            <div className='card' key={index}>
+                                <div className='card-body bg-light'>
+                                    <Link to={`/${film._id}`} className='h3 fst-italic text-decoration-none'>{film.Title}</Link>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    ))}
+
+                    
+                
             </>)
     )  
 }

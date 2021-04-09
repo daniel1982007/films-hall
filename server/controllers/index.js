@@ -26,12 +26,17 @@ export const importFilms = async (req, res) => {
     const films = req.body
     try {
         films.forEach(async (film) => {
-            await Film.findOneAndUpdate({Title: film.Title}, film, {new: true})
 
+            const foundFilm = await Film.findOneAndUpdate({Title: film.Title, Format: film.Format, ReleaseYear: film.ReleaseYear, Stars: film.Stars}, film, {new: true})
+            
+            if(!foundFilm) {
+                await Film.create(film)
+            }
             // const newFilm = new Film(film)
             // await newFilm.save()
         })
         const updatedFilms = await Film.find()
+        
         res.status(201).json(updatedFilms)
 
     } catch (error) {

@@ -11,6 +11,7 @@ const AddFilmForm = () => {
 
     const dispatch = useDispatch()
     const history = useHistory()
+    
 
     const [filmData, setFilmData] = useState({
         Title: '', ReleaseYear: '', Format: '', Stars: ''
@@ -29,8 +30,9 @@ const AddFilmForm = () => {
     const [errorMessage, setErrorMessage] = useState('')
 
     //how to get the id of new added film?
-    const ids = useSelector(state => state.films.map(film => film._id))
-    console.log(ids)
+    const films = useSelector(state => state.films)//state data my not be the same with data in database, there may be many reducers except filmsReducer
+    //when selected piece of state changes, even just just dispatch to reducer, it triggers component rerender, 
+    console.log(films)
 
 
     const handleChange = (e) => {
@@ -45,7 +47,7 @@ const AddFilmForm = () => {
 
         switch (fieldName) {
             case 'Title':
-                if(filmData.Title && !/^[\w:\- ]+$/.test(filmData.Title)) {
+                if(filmData.Title && !/^[\w:\-, ]+$/.test(filmData.Title)) {
                     setIsTitleErrorLabelOpen(true)
                     setTitleErrorMessage('Title could be combination of letters, numbers, spaces or symbols : -')
                 }
@@ -123,12 +125,12 @@ const AddFilmForm = () => {
             setErrorMessage('Clear input Errors to submit')
         } else {
             
-            dispatch(addFilm(filmData))
-            
+            const newFilm = await dispatch(addFilm(filmData))//this is an async function
+            console.log(newFilm)
             
             toast.success('Great, You have successfully submitted a film.')
-
-            history.push(`/`)//${data._id}
+            
+            history.push(`/${newFilm._id}`)//${data._id}
         }
     }
 
@@ -137,11 +139,13 @@ const AddFilmForm = () => {
         const file = e.target.files[0]
 
         const reader = new FileReader()
-        reader.onload = async (e) => {
+        reader.onload = (e) => {
             const text = e.target.result
             console.log(text)
             
-            const textGroups = text.split(/\r\n\r\n/g)
+            const textGroups = text.split(/[\r\n]{3,}/)
+            console.log(textGroups)
+
             const filmObjects = textGroups.map(oneTextGroup => {
                 const group = oneTextGroup.replace(/Release Year/, 'ReleaseYear')
                 const keys = group.match(/(?<=\\n)[\w]+|^[\w]+/gm)
@@ -156,10 +160,11 @@ const AddFilmForm = () => {
             dispatch(importFilms(filmObjects))
 
             history.push('/')
-
         }
 
         reader.readAsText(file)
+
+        // dispatch(importFilms(objs))
     }
 
     console.log(filmData)

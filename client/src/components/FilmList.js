@@ -33,8 +33,8 @@ const FilmList = () => {
 
                 
                     {films.map((film, index) => (
-                        <div className='container-sm text-center'>
-                            <div className='card' key={index}>
+                        <div className='container-sm text-center' key={index}>
+                            <div className='card'>
                                 <div className='card-body bg-light'>
                                     <Link to={`/${film._id}`} className='h3 fst-italic text-decoration-none'>{film.Title}</Link>
 

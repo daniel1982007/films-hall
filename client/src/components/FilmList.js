@@ -6,7 +6,7 @@ import {getFilms} from '../actions/index'
 const FilmList = () => {
     const dispatch = useDispatch()
 
-    const films = useSelector(state => state.films)
+    const films = useSelector(state => state.films.films)
     
     console.log(films)//first run because first render, second run because useEffect getfilms, pass to reducer, and here useSelector runs
     
@@ -17,7 +17,7 @@ const FilmList = () => {
 
 
     return (
-        !films.length ? 
+        !films?.length ? 
             (<div className='m-3 text-center'>
                 {/* <div >No data here</div> */}
                 <div className="spinner-border" role="status"></div>
@@ -34,13 +34,11 @@ const FilmList = () => {
                 
                     {films.map((film, index) => (
                         <div className='container-sm text-center' key={index}>
-                            <div className='card'>
+                            <div className='card m-2'>
                                 <div className='card-body bg-light'>
                                     <Link to={`/${film._id}`} className='h3 fst-italic text-decoration-none'>{film.Title}</Link>
-
                                 </div>
                             </div>
-
                         </div>
                     ))}
 

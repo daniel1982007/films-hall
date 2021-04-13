@@ -13,10 +13,18 @@ export const getFilms = async (req, res) => {
 export const addFilm = async (req, res) => {
     const film = req.body
     try {
-        const newFilm = new Film(film)
-        console.log(newFilm)
-        await newFilm.save()
-        res.status(201).json(newFilm)
+        const foundFilm = await Film.findOne(film)
+        console.log(foundFilm)
+
+        if(foundFilm) {
+            res.json({error: 'This film has been registered to system)))'})
+        } else {
+            const newFilm = new Film(film)
+            console.log(newFilm)
+            await newFilm.save()
+            res.status(201).json(newFilm)
+        }
+
     } catch (error) {
         res.status(409).json({message: error.message})
     }
@@ -36,7 +44,7 @@ export const importFilms = async (req, res) => {
             // await newFilm.save()
         })
         const updatedFilms = await Film.find()
-        
+
         res.status(201).json(updatedFilms)
 
     } catch (error) {

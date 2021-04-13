@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {CSSTransition} from 'react-transition-group'
 
 import {useDispatch, useSelector} from 'react-redux'
@@ -30,9 +30,16 @@ const AddFilmForm = () => {
     const [errorMessage, setErrorMessage] = useState('')
 
     //how to get the id of new added film?
-    const films = useSelector(state => state.films)//state data my not be the same with data in database, there may be many reducers except filmsReducer
+    const message = useSelector(state => state.films.message)//state data my not be the same with data in database, there may be many reducers except filmsReducer
     //when selected piece of state changes, even just just dispatch to reducer, it triggers component rerender, 
-    console.log(films)
+    console.log(message)
+
+    useEffect(() => {
+        if(message) {
+            setHasErrorMessage(true)
+            setErrorMessage(message)
+        }
+    }, [message])
 
 
     const handleChange = (e) => {
@@ -125,12 +132,22 @@ const AddFilmForm = () => {
             setErrorMessage('Clear input Errors to submit')
         } else {
             
-            const newFilm = await dispatch(addFilm(filmData))//this is an async function
+            //this is an async function, after dispatch to reducer new state, useSelector triggers rerender, rerun all commands, but logic inside of event will not rerun, because it reruns only when event happens!
+            const newFilm = await dispatch(addFilm(filmData))
+            console.log(message)//if same film data submit, throw an error
             console.log(newFilm)
+
+            //if(!newFilm.error) {
+            if(!newFilm.error) {
+                toast.success('Great, You have successfully submitted a film.')
+                history.push(`/${newFilm._id}`)//${data._id}
+            } 
+            // else {
+            //     setHasErrorMessage(true)
+            //     setErrorMessage('This film has registered to system...')
+            // }          
             
-            toast.success('Great, You have successfully submitted a film.')
             
-            history.push(`/${newFilm._id}`)//${data._id}
         }
     }
 

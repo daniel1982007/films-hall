@@ -1,23 +1,15 @@
-import axios from 'axios'
+import axios from "axios";
 
-const url = 'http://localhost:5000'
+const url = "http://localhost:8000";
 
-// export const getFilms = async () => {
-//     try {
-//         const {data} = await axios.get(url)
-//         console.log(data)
-//         return data
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+export const getFilms = () => axios.get(url);
 
-export const getFilms = () => axios.get(url)
+export const addFilm = (film) => axios.post(`${url}/add`, film);
 
-export const addFilm = (film) => axios.post(`${url}/add`, film)
+export const importFilms = (filmsObjs) =>
+  axios.patch(`${url}/import`, filmsObjs);
 
-export const importFilms = (filmsObjs) => axios.patch(`${url}/import`, filmsObjs)
+export const deleteFilm = (id) => axios.delete(`${url}/${id}/delete`);
 
-export const deleteFilm = (id) => axios.delete(`${url}/${id}/delete`)
-
-export const searchFilm = (str) => axios.post(`${url}/search`, {searchText: str})
+export const searchFilm = (str) =>
+  axios.post(`${url}/search`, { searchText: str });

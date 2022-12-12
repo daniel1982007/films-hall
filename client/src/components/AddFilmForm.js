@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import { addFilm, importFilms } from "../actions/index";
 import { toast } from "react-toastify";
+import FileBase from "react-file-base64";
 
 const AddFilmForm = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const AddFilmForm = () => {
     ReleaseYear: "",
     Format: "",
     Stars: "",
+    image: "",
   });
 
   const [isTitleErrorLabelOpen, setIsTitleErrorLabelOpen] = useState(false);
@@ -148,20 +150,12 @@ const AddFilmForm = () => {
       setHasErrorMessage(true);
       setErrorMessage("Clear input Errors to submit");
     } else {
-      //this is an async function, after dispatch to reducer new state, useSelector triggers rerender, rerun all commands, but logic inside of event will not rerun, because it reruns only when event happens!
       const newFilm = await dispatch(addFilm(filmData));
-      console.log(message); //if same film data submit, throw an error
       console.log(newFilm);
-
-      //if(!newFilm.error) {
       if (!newFilm.error) {
         toast.success("Great, You have successfully submitted a film.");
-        history.push(`/${newFilm._id}`); //${data._id}
+        history.push(`/${newFilm.page}/${newFilm.film._id}`);
       }
-      // else {
-      //     setHasErrorMessage(true)
-      //     setErrorMessage('This film has registered to system...')
-      // }
     }
   };
 
@@ -196,6 +190,10 @@ const AddFilmForm = () => {
     reader.readAsText(file);
 
     // dispatch(importFilms(objs))
+  };
+
+  const uploadImage = (e) => {
+    e.preventDefault();
   };
 
   console.log(filmData);
@@ -320,8 +318,23 @@ const AddFilmForm = () => {
           </form>
         </div>
         <div className="col-md-6">
+          <div className="my-5 mx-5">
+            <form onSubmit={uploadImage} className="d-flex align-items-center">
+              <FileBase
+                type="file"
+                multiple={false}
+                onDone={({ base64 }) => {
+                  setFilmData({ ...filmData, image: base64 });
+                }}
+              />
+              <button type="submit" className="btn btn-primary">
+                Upload Img
+              </button>
+            </form>
+            <p className="h6 mt-3">Add Film Image</p>
+          </div>
           <div className="my-2 mx-5">
-            <div className="d-flex">
+            <div className="d-flex align-items-center">
               <input type="file" onChange={handleImport} />
               <button className="btn btn-primary">Import</button>
             </div>

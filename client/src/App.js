@@ -11,7 +11,7 @@ import { Switch, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <div className="bg-light">
+    <div className="bg-light vh-100">
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -27,7 +27,10 @@ const App = () => {
         <Route path="/add">
           <AddFilmForm />
         </Route>
-        <Route path="/:id">
+        <Route exact path="/:page">
+          <FilmList />
+        </Route>
+        <Route path="/:page/:id">
           <Film />
         </Route>
       </Switch>

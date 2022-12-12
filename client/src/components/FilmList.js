@@ -1,18 +1,24 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilms } from "../actions/index";
+import Pagination from "./Pagination";
+import FilmItem from "./FilmItem";
 
 const FilmList = () => {
+  let { page } = useParams();
+  page = !page ? 1 : parseInt(page);
+
   const dispatch = useDispatch();
 
-  const films = useSelector((state) => state.films.films);
-
-  console.log(films); //first run because first render, second run because useEffect getfilms, pass to reducer, and here useSelector runs
+  const films = useSelector((state) => {
+    console.log(state.films.films);
+    return state.films.films;
+  });
 
   useEffect(() => {
     dispatch(getFilms());
-  }, [dispatch]); //when redirect from other location to this home '/', it will rerender, all components run, if state inside this component changes, useEffect will not run,, if nothing changes in []
+  }, [dispatch]);
 
   return !films?.length ? (
     <div className="m-3 text-center">
@@ -20,25 +26,16 @@ const FilmList = () => {
       <div className="spinner-border" role="status"></div>
     </div>
   ) : (
-    <div className="container-md p-0 my-5 d-flex flex-column gap-5">
-      <h1 className="mb-0 fs-1 fw-bold text-dark text-center">Films' list</h1>
-      <div className="p-3">
-        {films.map((film, index) => (
-          <div className="container-sm p-0 text-center" key={index}>
-            <div className="card mb-3">
-              <div className="card-body bg-light d-flex justify-content-between">
-                <h3 className="card-title">{film.Title}</h3>
-                <Link
-                  to={`/${film._id}`}
-                  className="h6 p-2 border border-primary text-primary text-decoration-none rounded"
-                >
-                  Check detail
-                </Link>
-              </div>
-            </div>
+    <div className="container-md my-5">
+      <h1 className="mb-5 fs-1 fw-bold text-dark text-center">Films' list</h1>
+      <div className="row">
+        {films.slice((page - 1) * 9, page * 9).map((film, index) => (
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-3" key={index}>
+            <FilmItem film={film} page={page} />
           </div>
         ))}
       </div>
+      <Pagination films={films} page={page} />
     </div>
   );
 };

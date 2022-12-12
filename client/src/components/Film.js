@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteFilm } from "../actions/index";
 
 const Film = () => {
-  const { id } = useParams();
-  console.log(id);
+  const { page, id } = useParams();
+  console.log(page, id);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -13,9 +13,10 @@ const Film = () => {
   //1, if refresh, films will be empty
   //2, if add new, films are not updated
 
-  const film = JSON.parse(localStorage.getItem("films")).find(
-    (film) => film._id === id
-  );
+  const films = useSelector((state) => state.films.films);
+  console.log(films);
+
+  const film = films.find((film) => film.film._id === id);
   console.log(film);
 
   //const film = films.find(film => film._id === id)
@@ -29,6 +30,7 @@ const Film = () => {
   return (
     <div className="container-sm py-3">
       <div className="card">
+        <img src={film.image} alt="" />
         <div className="card-header">
           <h3 className="text-dark">
             Wonderful film: <span className="m-3 fw-bold">{film.Title}</span>

@@ -3,7 +3,6 @@ import Film from "../models/Film.js";
 export const getFilms = async (req, res) => {
   try {
     const films = await Film.find();
-
     res.status(200).json(films);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -14,15 +13,16 @@ export const addFilm = async (req, res) => {
   const film = req.body;
   try {
     const foundFilm = await Film.findOne(film);
-    console.log(foundFilm);
-
     if (foundFilm) {
       res.json({ error: "This film has been registered to system)))" });
     } else {
       const newFilm = new Film(film);
-      console.log(newFilm);
       await newFilm.save();
-      res.status(201).json(newFilm);
+      const films = await Film.find();
+      const counts = films.length;
+      const page = Math.ceil(counts / 9);
+
+      res.status(201).json({ film: newFilm, page });
     }
   } catch (error) {
     res.status(409).json({ message: error.message });
